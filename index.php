@@ -262,7 +262,7 @@ include('scripts.php');
 						<div class="panel-heading">
 							<?php 
 							include('database.php');
-                                 $todo = "SELECT count(tasks.id) as 'id',statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=1 )";
+                                 $todo = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=1 )";
 								 $resultTodo = mysqli_query($connexion, $todo);
 								 $todo = mysqli_fetch_assoc($resultTodo);
 							?>
@@ -280,7 +280,7 @@ include('scripts.php');
 							<?php
 							//PHP CODE HERE
 							//DATA FROM getTasks() FUNCTION
-							getTasks(1);
+							getTasks($todo['id_statu']);
 							?>
 									
 						</div>
@@ -291,7 +291,7 @@ include('scripts.php');
 						<div class="panel-heading">
 						<?php 
 							include('database.php');
-                                 $inProg = "SELECT count(tasks.id)as 'id',statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=2)";
+                                 $inProg = "SELECT count(tasks.id)as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=2)";
 								 $resultInprog = mysqli_query($connexion,  $inProg);
 								 $inProgr = mysqli_fetch_assoc($resultInprog);
 							?>
@@ -308,7 +308,7 @@ include('scripts.php');
 							<?php
 							//PHP CODE HERE
 							//DATA FROM getTasks() FUNCTION
-							getTasks(2);
+							getTasks($inProgr['id_statu']);
 							?>
 						</div>
 					</div>
@@ -318,7 +318,7 @@ include('scripts.php');
 						<div class="panel-heading">
 						<?php 
 							include('database.php');
-							$done = "SELECT count(tasks.id) as 'id',statues.name as 'status' FROM tasks,statues WHERE (tasks.status_id=statues.id and status_id=3 )";
+							$done = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues WHERE (tasks.status_id=statues.id and status_id=3 )";
 							$resultDone = mysqli_query($connexion, $done);
 							$done = mysqli_fetch_assoc($resultDone);
 							?>
@@ -335,7 +335,7 @@ include('scripts.php');
 							<?php
 							//PHP CODE HERE
 							//DATA FROM getTasks() FUNCTION
-							getTasks(3);
+							getTasks($done['id_statu']);
 							?>
 						</div>
 					</div>
@@ -363,7 +363,7 @@ include('scripts.php');
 					<div class="modal-body">
 						<!-- This Input Allows Storing Task Index  -->
 						<div class="mb-3">
-							<input type="text" class="form-control" id="task-id" value=""  readonly>
+							<input type="hidden" class="form-control" id="task-id" value="" name="id" >
 						</div>
 						
 						<div class="mb-3">
@@ -374,7 +374,7 @@ include('scripts.php');
 							<label class="form-label">Type</label>
 							<div class="ms-3">
 								<div class="form-check mb-1">
-									<input class="form-check-input" name="task-type" type="radio" value=1 id="task-type-feature" />
+									<input class="form-check-input" name="task-type" type="radio" value=1 id="task-type-feature"  checked/>
 									<label class="form-check-label" for="task-type-feature">Feature</label>
 								</div>
 								<div class="form-check">
@@ -387,11 +387,11 @@ include('scripts.php');
 						<div class="mb-3">
 							<label class="form-label">Priority</label>
 							<select class="form-select" id="task-priority" name="priority">
-								<option value="" >Please select</option>
-								<option value=1>Critical</option>
-								<option value=2>High</option>
-								<option value=3>Medium</option>
-								<option value=4>Low</option>
+								<option  value="" >Please select</option>
+								<option id="priority-1" value=1>Critical</option>
+								<option id="priority-2"value=2>High</option>
+								<option id="priority-3" value=3>Medium</option>
+								<option id="priority-4"value=4>Low</option>
 								
 							
 								
@@ -401,14 +401,14 @@ include('scripts.php');
 							<label class="form-label">Status</label>
 							<select class="form-select" id="task-status" name="status">
 								<option value="">Please select</option>
-								<option value=1>To Do</option>
-								<option value=2>In Progress</option>
-								<option value=3>Done</option>
+								<option id="todo" value=1>To Do</option>
+								<option id="inProgress" value=2>In Progress</option>
+								<option id="done" value=3>Done</option>
 							</select>
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Date</label>
-							<input type="date" class="form-control" id="task-date" name="date" />
+							<input type="datetime-local" class="form-control" id="task-date" name="date" />
 						</div>
 						<div class="mb-0">
 							<label class="form-label">Description</label>
@@ -418,7 +418,7 @@ include('scripts.php');
 					</div>
 					<div class="modal-footer">
 						<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
-						<button type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete-btn">Delete</a>
+						<button type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete-btn" onclick="return confirm('sure to delete this task!'); ">Delete</a>
 							<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn">Update</a>
 								<button type="submit" name="save" class="btn btn-primary task-action-btn" id="task-save-btn">Save</button>
 					</div>
