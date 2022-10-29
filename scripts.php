@@ -67,8 +67,13 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         $priority = isset($_POST['priority'])  ?  $_POST['priority']   :   '0';
 
         $status = isset($_POST['status'])  ?  $_POST['status']   :   '0';
-
-        $date = isset($_POST['date'])  ?  $_POST['date']   :   '0';
+        $date = isset($_POST['date'])  ?  $_POST['date']   :'';
+       if($date==''){
+        //date and time now if user is not entrer a date exact
+        $date=date("y-m-d h:i:s");
+       }
+           
+    
 
         $description = isset($_POST['description'])  ?  $_POST['description']   :   '0000-00-00';
    //   echo $title.'<br>'.$type.'<br>'.$priority.'<br>'.$status.'<br>'.$date.'<br>'.$description;
