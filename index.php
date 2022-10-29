@@ -19,6 +19,11 @@ include('scripts.php');
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
 	<!-- ================== END core-css ================== -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
+	<style>
+		#task-title:invalid {
+			border: red solid 3px;
+			}
+	</style>
 	<!-- ================== END core-JQUery ================== -->
 </head>
 
@@ -226,7 +231,7 @@ include('scripts.php');
 				</div>
 
 				<div class="ms-auto">
-					<a href="#modal-task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
+					<a id="addTaskBtn" href="#modal-task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
 				</div>
 			</div>
 
@@ -257,9 +262,9 @@ include('scripts.php');
 			<?php endif ?>
 			<div class="row">
 
-				<div class="col-xl-4 col-lg-6">
+				<div class="col-xl-4 col-lg-6 ">
 					<div class="panel panel-inverse">
-						<div class="panel-heading">
+						<div class="panel-heading ">
 							<?php 
 							include('database.php');
                                  $todo = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=1 )";
@@ -274,7 +279,7 @@ include('scripts.php');
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
 							</div>
 						</div>
-						<div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0" id="to-do-tasks">
+						<div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0 " id="to-do-tasks">
 							<!-- TO DO TASKS HERE -->
 							
 							<?php
@@ -284,7 +289,31 @@ include('scripts.php');
 							?>
 									
 						</div>
+						<div class="rounded-bottom panel-footer p-0 bg-dark">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center mt-3">
+								<li class="page-item">
+								<a class="page-link" href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+								</li>
+								<li class="page-item"><a class="page-link" href="#" >1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item">
+								<a class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+								</li>
+							</ul>
+						</nav>
+						</div>
+					
+								
 					</div>
+					
 				</div>
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
@@ -310,6 +339,27 @@ include('scripts.php');
 							//DATA FROM getTasks() FUNCTION
 							getTasks($inProgr['id_statu']);
 							?>
+						</div>
+						<div class="rounded-bottom panel-footer p-0 bg-dark">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center mt-3">
+								<li class="page-item">
+								<a class="page-link" href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+								</li>
+								<li class="page-item"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item">
+								<a class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+								</li>
+							</ul>
+						</nav>
 						</div>
 					</div>
 				</div>
@@ -337,6 +387,27 @@ include('scripts.php');
 							//DATA FROM getTasks() FUNCTION
 							getTasks($done['id_statu']);
 							?>
+						</div>
+						<div class="rounded-bottom panel-footer p-0 bg-dark">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center mt-3">
+								<li class="page-item">
+								<a class="page-link" href="#" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+								</li>
+								<li class="page-item"><a class="page-link" href="#">1</a></li>
+								<li class="page-item"><a class="page-link" href="#">2</a></li>
+								<li class="page-item"><a class="page-link" href="#">3</a></li>
+								<li class="page-item">
+								<a class="page-link" href="#" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+								</li>
+							</ul>
+						</nav>
 						</div>
 					</div>
 				</div>
@@ -368,7 +439,8 @@ include('scripts.php');
 						
 						<div class="mb-3">
 							<label class="form-label">Title</label>
-							<input type="text" class="form-control" id="task-title" name="title" />
+							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" pattern="[A-Za-z0-9]{4,10}"   />
+							<div id="titleError"></div>
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Type</label>
