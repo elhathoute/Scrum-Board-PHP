@@ -19,6 +19,12 @@ include('scripts.php');
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
 	<!-- ================== END core-css ================== -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
+	
+	<style>
+		#task-title:invalid {
+			border: red solid 3px;
+			}
+	</style>
 	<!-- ================== END core-JQUery ================== -->
 </head>
 
@@ -48,10 +54,11 @@ include('scripts.php');
 				<div class="navbar-item navbar-form">
 					<form action="" method="POST" name="search">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" />
-							<button type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+							<input type="text" class="form-control" placeholder="Enter keyword" id="inputSearch"/>
+							<button   type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
 						</div>
 					</form>
+					
 				</div>
 				<div class="navbar-item dropdown">
 					<a href="#" data-bs-toggle="dropdown" class="navbar-link dropdown-toggle icon">
@@ -211,7 +218,7 @@ include('scripts.php');
 		<!-- END #sidebar -->
 
 		<!-- BEGIN #content -->
-		<div id="content" class="app-content" style="min-height: 100vh; background: url(assets/img/cover/cover-scrum-board.png) no-repeat fixed; background-size: 360px; background-position: right bottom;">
+		<div id="content" class="app-content" style="min-height: 100vh; background: url(assets/img/cover/cover-scrum-board.png) no-repeat fixed; background-size1: 360px; background-position: right bottom;">
 			<div class="d-flex align-items-center mb-3">
 				<div>
 					<ol class="breadcrumb">
@@ -226,7 +233,7 @@ include('scripts.php');
 				</div>
 
 				<div class="ms-auto">
-					<a href="#modal-task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
+					<a id="addTaskBtn" href="#modal-task" data-bs-toggle="modal" class="btn btn-success btn-rounded px-4 rounded-pill"><i class="fa fa-plus fa-lg me-2 ms-n2 text-success-900"></i> Add Task</a>
 				</div>
 			</div>
 
@@ -257,16 +264,23 @@ include('scripts.php');
 			<?php endif ?>
 			<div class="row">
 
-				<div class="col-xl-4 col-lg-6">
+				<div class="col-xl-4 col-lg-6 ">
 					<div class="panel panel-inverse">
-						<div class="panel-heading">
+						<div class="panel-heading ">
 							<?php 
 							include('database.php');
-                                 $todo = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=1 )";
+							$size=isset($_GET['size'] ) ?$_GET['size']: 4;    
+                            $page=isset($_GET['page'] ) ?$_GET['page']: 1;
+                                 $todo = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=1 ) ";
 								 $resultTodo = mysqli_query($connexion, $todo);
 								 $todo = mysqli_fetch_assoc($resultTodo);
+								 $nbrOfTodo= $todo['id'];
+                                 $restOfDevision= $nbrOfTodo%$size;
+								 ($restOfDevision==0) ? ($nbrOfPage=$nbrOfTodo/$size ) : ($nbrOfPage = floor($nbrOfTodo/$size)+1);
+								 $previous=$page-1;
+								 $next=$page+1;
 							?>
-							<h4 class="panel-title"><?php echo $todo['status'] ;?> (<span id="to-do-tasks-count"><?php echo  $todo['id'];?></span>)</h4>
+							<h4 class="panel-title"><?php echo $todo['status'] ;?> (<span id="to-do-tasks-count"><?php echo  $nbrOfTodo;?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -274,28 +288,62 @@ include('scripts.php');
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-danger" data-toggle="panel-remove"><i class="fa fa-times"></i></a>
 							</div>
 						</div>
-						<div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0" id="to-do-tasks">
+						<div class="list-group list-group-flush rounded-bottom overflow-hidden panel-body p-0 " id="to-do-tasks">
 							<!-- TO DO TASKS HERE -->
 							
 							<?php
 							//PHP CODE HERE
 							//DATA FROM getTasks() FUNCTION
-							getTasks($todo['id_statu']);
+							getTasks($todo['id_statu'],$size,$page);
 							?>
 									
 						</div>
+						 <?php if($nbrOfTodo>4) { ?> 
+						<div class="rounded-bottom panel-footer p-0 bg-dark">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center mt-3">
+								<li class="page-item">
+								<a class="page-link bg-success" href="index.php?page=<?php if($previous!=0) {echo $previous;}else{echo 1;}?>" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+								</li>
+								<?php for($i=1;$i<=$nbrOfPage;$i++) {?>
+								<li class="<?php if($i == $page) echo'active'?> page-item"><a class="page-link" href="index.php?page=<?php echo $i;?>" ><?php echo $i;?></a></li>
+								<?php } ?>
+								<li class="page-item">
+								<a class="page-link bg-warning" href="index.php?page=<?php if($next<$i) {echo $next;}else{echo 1;}?>" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+								</li>
+							</ul>
+						</nav>
+						</div>
+
+					<?php  } ?>
+					
+								
 					</div>
+					
 				</div>
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
 						<?php 
 							include('database.php');
+							$size1=isset($_GET['size1'] ) ?$_GET['size1']: 4;    
+                            $page1=isset($_GET['page1'] ) ?$_GET['page1']: 1;
                                  $inProg = "SELECT count(tasks.id)as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=2)";
 								 $resultInprog = mysqli_query($connexion,  $inProg);
 								 $inProgr = mysqli_fetch_assoc($resultInprog);
+								 $nbrOfInProgress= $inProgr['id'];
+                                 $restOfDevision= $nbrOfInProgress%$size1;
+								 ($restOfDevision==0) ? ($nbrOfPage=$nbrOfInProgress/$size1 ) : ($nbrOfPage = floor($nbrOfInProgress/$size1)+1);
+								 $previous=$page1-1;
+								 $next=$page1+1;
 							?>
-							<h4 class="panel-title"><?php echo $inProgr['status'] ;?>  (<span id="in-progress-tasks-count"><?php echo $inProgr ['id']; ?></span>)</h4>
+							<h4 class="panel-title"><?php echo $inProgr['status'] ;?>  (<span id="in-progress-tasks-count"><?php echo $inProgr['id']; ?></span>)</h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -308,9 +356,33 @@ include('scripts.php');
 							<?php
 							//PHP CODE HERE
 							//DATA FROM getTasks() FUNCTION
-							getTasks($inProgr['id_statu']);
+							getTasks($inProgr['id_statu'],$size1,$page1);
 							?>
 						</div>
+						<?php if($nbrOfInProgress>4) { ?> 
+						<div class="rounded-bottom panel-footer p-0 bg-dark">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center mt-3">
+								<li class="page-item">
+								<a class="page-link bg-success" href="index.php?page1=<?php if($previous!=0) {echo $previous;}else{echo 1;}?>" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+								</li>
+								<?php for($i=1;$i<=$nbrOfPage;$i++) {?>
+								<li class="<?php if($i == $page1) echo'active'?> page-item"><a class="page-link" href="index.php?page1=<?php echo $i;?>" ><?php echo $i;?></a></li>
+								<?php } ?>
+								<li class="page-item">
+								<a class="page-link bg-warning" href="index.php?page1=<?php if($next<$i) {echo $next;}else{echo 1;}?>" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+								</li>
+							</ul>
+						</nav>
+						</div>
+
+					<?php  } ?>
 					</div>
 				</div>
 				<div class="col-xl-4 col-lg-6">
@@ -318,9 +390,16 @@ include('scripts.php');
 						<div class="panel-heading">
 						<?php 
 							include('database.php');
+							$size2=isset($_GET['size2'] ) ?$_GET['size2']: 4;    
+                            $page2=isset($_GET['page2'] ) ?$_GET['page2']: 1;
 							$done = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues WHERE (tasks.status_id=statues.id and status_id=3 )";
 							$resultDone = mysqli_query($connexion, $done);
 							$done = mysqli_fetch_assoc($resultDone);
+							     $nbrOfDone=$done['id'];
+                                 $restOfDevision= $nbrOfDone%$size2;
+								 ($restOfDevision==0) ? ($nbrOfPage=$nbrOfDone/$size2 ) : ($nbrOfPage = floor($nbrOfDone/$size2)+1);
+								 $previous=$page2-1;
+								 $next=$page2+1;
 							?>
 							<h4 class="panel-title"><?php echo $done['status'] ;?>(<span id="done-tasks-count"><?php echo $done['id'];?></span>)</h4>
 							<div class="panel-heading-btn">
@@ -335,9 +414,33 @@ include('scripts.php');
 							<?php
 							//PHP CODE HERE
 							//DATA FROM getTasks() FUNCTION
-							getTasks($done['id_statu']);
+							getTasks($done['id_statu'],$size2,$page2);
 							?>
 						</div>
+						<?php if($nbrOfDone>4) { ?> 
+						<div class="rounded-bottom panel-footer p-0 bg-dark">
+						<nav aria-label="Page navigation example">
+							<ul class="pagination justify-content-center mt-3">
+								<li class="page-item">
+								<a class="page-link bg-success" href="index.php?page2=<?php if($previous!=0) {echo $previous;}else{echo 1;}?>" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+								</a>
+								</li>
+								<?php for($i=1;$i<=$nbrOfPage;$i++) {?>
+								<li class="<?php if($i == $page2) echo'active'?> page-item"><a class="page-link" href="index.php?page2=<?php echo $i;?>" ><?php echo $i;?></a></li>
+								<?php } ?>
+								<li class="page-item">
+								<a class="page-link bg-warning" href="index.php?page2=<?php if($next<$i) {echo $next;}else{echo 1;}?>" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+								</a>
+								</li>
+							</ul>
+						</nav>
+						</div>
+
+					<?php  } ?>
 					</div>
 				</div>
 			</div>
@@ -368,7 +471,8 @@ include('scripts.php');
 						
 						<div class="mb-3">
 							<label class="form-label">Title</label>
-							<input type="text" class="form-control" id="task-title" name="title" />
+							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" pattern="[A-Za-z0-9]{4,10}"   />
+							<div id="titleError"></div>
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Type</label>
@@ -412,7 +516,7 @@ include('scripts.php');
 						</div>
 						<div class="mb-0">
 							<label class="form-label">Description</label>
-							<textarea class="form-control" rows="10" id="task-description" name="description"></textarea>
+							<textarea class="form-control" rows="10" id="task-description" name="description" ></textarea>
 						</div>
 
 					</div>
@@ -430,9 +534,9 @@ include('scripts.php');
 	<!-- ================== BEGIN core-js ================== -->
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
-	
+	<script src="assets/js/scripts.js"></script>
 	<!-- ================== END core-js ================== -->
-	<script src="scripts.js"></script>
+	
 
 	<script>
 		//reloadTasks();

@@ -11,18 +11,22 @@
     if(isset($_POST['delete']))      deleteTask();
     
 
-    function getTasks($status)
+    function getTasks($status,$size,$page)
     {
         //CODE HERE
           //SQL SELECT
           include('database.php');
-
-$requettasks = " SELECT tasks.id,tasks.title,tasks.task_datetime,tasks.description,tasks.status_id,tasks.priority_id,types.name as 'type' ,priorities.name as 'priority',statues.name as'status' FROM tasks,types,priorities,statues where (status_id=$status and tasks.type_id=types.id and tasks.priority_id=priorities.id and tasks.status_id=statues.id )ORDER BY id desc ";
+        //   $size=isset($_GET['size'] ) ?$_GET['size']: 3;    
+        //   $page=isset($_GET['page'] ) ?$_GET['page']: 1;
+        $debut= ($page-1)*$size ; 
+$requettasks = " SELECT tasks.id,tasks.title,tasks.task_datetime,tasks.description,tasks.status_id,tasks.priority_id,types.name as 'type' ,priorities.name as 'priority',statues.name as'status' FROM tasks,types,priorities,statues where (status_id=$status and tasks.type_id=types.id and tasks.priority_id=priorities.id and tasks.status_id=statues.id )ORDER BY id desc limit $debut,$size ";
 $tasksRequet = mysqli_query($connexion, $requettasks);
 
 
         while ($tasks = mysqli_fetch_assoc($tasksRequet)) { 
-           ( ($tasks['status_id']==1)? $typeIcon='fa-question ' : ($tasks['status_id']==2))? $typeIcon='fa-calendar' : $typeIcon='fa-check'
+           if($tasks['status_id']==1) {($typeIcon='fa-question ' );}
+            else if ($tasks['status_id']==2) {($typeIcon='fa-calendar');} 
+             else if($tasks['status_id']==3){( $typeIcon='fa-check');}
             ?>
             <button data-bs-toggle="modal" data-bs-target="#modal-task" onclick="edit(<?php echo $tasks['id']?>)" id="<?php echo $tasks['id']?>"  class="d-flex button aligns-items-center w-100 border p-1 ">
                 <div class=" col-md-1 ">
@@ -67,8 +71,13 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         $priority = isset($_POST['priority'])  ?  $_POST['priority']   :   '0';
 
         $status = isset($_POST['status'])  ?  $_POST['status']   :   '0';
-
-        $date = isset($_POST['date'])  ?  $_POST['date']   :   '0';
+        $date = isset($_POST['date'])  ?  $_POST['date']   :'';
+       if($date==''){
+        //date and time now if user is not entrer a date exact
+        $date=date("y-m-d h:i:s");
+       }
+           
+    
 
         $description = isset($_POST['description'])  ?  $_POST['description']   :   '0000-00-00';
    //   echo $title.'<br>'.$type.'<br>'.$priority.'<br>'.$status.'<br>'.$date.'<br>'.$description;
