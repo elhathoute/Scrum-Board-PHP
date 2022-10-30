@@ -54,7 +54,7 @@ include('scripts.php');
 				<div class="navbar-item navbar-form">
 					<form action="" method="POST" name="search">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" id="inputSearch"/>
+							<input type="text" class="form-control" placeholder="Enter keyword" id="btnSearch"/>
 							<button   type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
 						</div>
 					</form>
