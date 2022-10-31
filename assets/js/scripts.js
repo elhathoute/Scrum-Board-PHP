@@ -1,11 +1,57 @@
- $(document).ready(function(){
-    $("#inputSearch").keyup(function(){
-        let search=$("#inputSearch").val();
-    console.log(search);
-    });
- });
+ $(document).ready(function() {
+     $("#inputSearch").keyup(function() {
+         var search = $("#inputSearch").val();
+         $.ajax({
+            "url":"searchTask.php",
+            "method":"POST",
+            "data":{
+                inputSearch:search
+            },
+            success:function(result){
+                $('#to-do-tasks').html(result);
+             
+            },
+            error:function(error){
+              console.log("error message is :"+error);
+            },
+            beforeSend:function(){
+              $("#to-do-tasks").html('<img src="charg9.gif" style="height:160px;width:160px;margin-left:30%;">');
+            }
+
+         });
+   
+        
+     });
+    //  $("#inputSearch1").keyup(function() {
+         
+    //     var search1 = $("#inputSearch1").val();
+    //     $.ajax({
+    //        "url":"searchTask.php",
+    //        "method":"POST",
+    //        "data":{
+        
+    //            inputSearch1:search1
+    //        },
+    //        success:function(result){
+         
+    //            $('#in-progress-tasks').html(result);
+    //        },
+    //        error:function(error){
+    //          console.log("error message is :"+error);
+    //        },
+    //        beforeSend:function(){
+    //          $("#in-progress-tasks").html('<img src="charg9.gif" style="height:160px;width:160px;margin-left:30%;">');
+    //        }
+
+    //     });
+    // });
+
+
+});
 
 function edit(id) {
+    //change the title of modal
+    document.getElementById("header-task").innerHTML = '<h5>UPDATE TASK</h5>';
     //get the id from the button
     document.getElementById("task-id").value = id;
     //get the title 
@@ -19,7 +65,6 @@ function edit(id) {
     (type == 'Feature') ? (document.getElementById("task-type-feature").checked = true) : (document.getElementById("task-type-bug").checked = true);
     //get the priority
     let priority = document.getElementById(id).children[1].children[2].children[0].innerHTML;
-
     if (priority == 'Critical') {
         document.getElementById("priority-1").selected = true;
     } else if (priority == 'Hight') {
@@ -45,20 +90,15 @@ function edit(id) {
     document.getElementById('task-save-btn').style.display = 'none';
     document.getElementById("task-update-btn").style.display = 'block';
     document.getElementById("task-delete-btn").style.display = 'block';
-
 }
-
 //disabled btn of update and delete
 document.getElementById("addTaskBtn").addEventListener("click", () => {
     //reset formulaire
     resetForm();
-
     document.getElementById("task-update-btn").style.display = 'none';
     document.getElementById("task-delete-btn").style.display = 'none';
     document.getElementById('task-save-btn').style.display = 'block';
-
 })
-
 function resetForm() {
     document.getElementById("task-title").value = '';
     document.getElementById("task-type-feature").checked = true;
@@ -69,4 +109,3 @@ function resetForm() {
     document.getElementById("task-status").value = '';
 
 }
-

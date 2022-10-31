@@ -9,6 +9,7 @@
     if(isset($_POST['save']))        saveTask();
     if(isset($_POST['update']))      updateTask();
     if(isset($_POST['delete']))      deleteTask();
+
     
 
     function getTasks($status,$size,$page)
@@ -100,6 +101,7 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         //CODE HERE
         //SQL UPDATE
         include('database.php');
+        
         $id=isset($_POST['id'])  ?  $_POST['id']   :   '';
 
         $title = isset($_POST['title'])  ?  $_POST['title']   :   '';
@@ -139,5 +141,4 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         }
        
     }
-
-?>
+   

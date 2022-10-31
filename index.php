@@ -17,11 +17,24 @@ include('scripts.php');
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
+
 	<!-- ================== END core-css ================== -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
 	
+	
 	<style>
-		#task-title:invalid {
+		.search:focus {
+			border: 2px solid white;
+			background-color: black;
+			color:antiquewhite;
+		
+			}
+		#task-priority:invalid {
+			border: red solid 3px;
+			}
+			#task-title:invalid {
+			border: red solid 3px;
+			}#task-status:invalid {
 			border: red solid 3px;
 			}
 	</style>
@@ -50,12 +63,13 @@ include('scripts.php');
 			</div>
 			<!-- END navbar-header -->
 			<!-- BEGIN header-nav -->
+						
 			<div class="navbar-nav">
 				<div class="navbar-item navbar-form">
-					<form action="" method="POST" name="search">
+					<form action="searchTask.php" method="POST" name="">
 						<div class="form-group">
-							<input type="text" class="form-control" placeholder="Enter keyword" id="btnSearch"/>
-							<button   type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
+							<input type="text" class="form-control" placeholder="Enter keyword" id="" name=""/>
+							<button  name="search" type="submit" class="btn btn-search"><i class="fa fa-search"></i></button>
 						</div>
 					</form>
 					
@@ -281,6 +295,11 @@ include('scripts.php');
 								 $next=$page+1;
 							?>
 							<h4 class="panel-title"><?php echo $todo['status'] ;?> (<span id="to-do-tasks-count"><?php echo  $nbrOfTodo;?></span>)</h4>
+							<!-- search task of todo -->
+							<div class="d-flex  w-20 form-group bg-white rounded-pill w-50 me-2 ">
+							<input type="text" class="search form-control rounded-pill " placeholder="search" id="inputSearch" name="inputSearch" autocomplete="none"/>
+							</div>
+						
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -296,7 +315,6 @@ include('scripts.php');
 							//DATA FROM getTasks() FUNCTION
 							getTasks($todo['id_statu'],$size,$page);
 							?>
-									
 						</div>
 						 <?php if($nbrOfTodo>4) { ?> 
 						<div class="rounded-bottom panel-footer p-0 bg-dark">
@@ -344,6 +362,10 @@ include('scripts.php');
 								 $next=$page1+1;
 							?>
 							<h4 class="panel-title"><?php echo $inProgr['status'] ;?>  (<span id="in-progress-tasks-count"><?php echo $inProgr['id']; ?></span>)</h4>
+							<!-- search in progress -->
+							<div class="d-flex  w-20 form-group bg-white rounded-pill w-50 me-2 ">
+							<input type="text" class=" search form-control rounded-pill " placeholder="search" id="inputSearch1" name="inputSearch1"/>
+							</div>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -460,7 +482,7 @@ include('scripts.php');
 			<div class="modal-content">
 				<form action="scripts.php" method="POST" id="form-task" >
 					<div class="modal-header">
-						<h5 class="modal-title">Add Task</h5>
+						<h5 id="header-task" class="modal-title">Add Task</h5>
 						<a href="#" class="btn-close" data-bs-dismiss="modal"></a>
 					</div>
 					<div class="modal-body">
@@ -471,7 +493,7 @@ include('scripts.php');
 						
 						<div class="mb-3">
 							<label class="form-label">Title</label>
-							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" pattern="[A-Za-z0-9]{4,10}"   />
+							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" placeholder="title must be 4 char au min"  pattern="[A-Za-z0-9]{4,10}"  required  />
 							<div id="titleError"></div>
 						</div>
 						<div class="mb-3">
@@ -490,7 +512,7 @@ include('scripts.php');
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Priority</label>
-							<select class="form-select" id="task-priority" name="priority">
+							<select class="form-select" id="task-priority" name="priority" required>
 								<option  value="" >Please select</option>
 								<option id="priority-1" value=1>Critical</option>
 								<option id="priority-2"value=2>High</option>
@@ -503,7 +525,7 @@ include('scripts.php');
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Status</label>
-							<select class="form-select" id="task-status" name="status">
+							<select class="form-select" id="task-status" name="status" required>
 								<option value="">Please select</option>
 								<option id="todo" value=1>To Do</option>
 								<option id="inProgress" value=2>In Progress</option>
@@ -534,9 +556,12 @@ include('scripts.php');
 	<!-- ================== BEGIN core-js ================== -->
 	<script src="assets/js/vendor.min.js"></script>
 	<script src="assets/js/app.min.js"></script>
+
 	<script src="assets/js/scripts.js"></script>
+	
 	<!-- ================== END core-js ================== -->
 	
+
 
 	<script>
 		//reloadTasks();
