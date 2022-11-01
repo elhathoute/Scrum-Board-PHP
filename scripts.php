@@ -29,7 +29,7 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
             else if ($tasks['status_id']==2) {($typeIcon='fa-calendar');} 
              else if($tasks['status_id']==3){( $typeIcon='fa-check');}
             ?>
-            <button data-bs-toggle="modal" data-bs-target="#modal-task" onclick="edit(<?php echo $tasks['id']?>)" id="<?php echo $tasks['id']?>"  class="d-flex button aligns-items-center w-100 border p-1 ">
+            <button data-bs-toggle="modal" data-bs-target="#modal-task" onclick="edit(<?php echo $tasks['id']?>)" id="<?php echo $tasks['id']?>"   class="d-flex button aligns-items-center w-100 border p-1 ">
                 <div class=" col-md-1 ">
                     <i class="fa  <?php echo $typeIcon.' '.'text-success'?>"></i>
                 </div>
@@ -120,7 +120,7 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         $updateTask=mysqli_query($connexion,$requet);
 
         if($updateTask){
-            $_SESSION['message'] = "Task has been updated successfully !";
+            $_SESSION['message1'] = "Task has been updated successfully !";
             header('location: index.php');
         }
       
@@ -136,7 +136,7 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         $requet = "delete from tasks where id=$id ";
         $deleteTask=mysqli_query($connexion,$requet);
         if($deleteTask){
-            $_SESSION['message'] = "Task has been deleted successfully !";
+            $_SESSION['message2'] = "Task has been deleted successfully !";
             header('location: index.php');
         }
        
