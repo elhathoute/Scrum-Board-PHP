@@ -26,7 +26,7 @@
     //validtion form with jquery
     //validate title
     $('#task-title').css('border','1px dashed red');
-    $('#task-title').css('border','1px dashed red');
+    $(this).parent().find('.error-message').fadeIn(200);
     $('#task-title').blur(function(){
         
         if($(this).val().length<4){
