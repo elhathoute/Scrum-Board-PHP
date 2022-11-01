@@ -1,4 +1,5 @@
  $(document).ready(function() {
+   
      $("#inputSearch").keyup(function() {
          var search = $("#inputSearch").val();
          $.ajax({
@@ -24,17 +25,23 @@
      });
     //validtion form with jquery
     //validate title
+    $('#task-title').css('border','1px dashed red');
+    $('#task-title').css('border','1px dashed red');
     $('#task-title').blur(function(){
+        
         if($(this).val().length<4){
+
             $(this).css('border','1px dashed red');
            $(this).parent().find('.error-message').fadeIn(200);
         }else{
            $(this).parent().find('.error-message').fadeOut(200);
            $(this).css('border','1px solid green');
-
+    
         }
     });
      //validate priority
+     $('#task-priority').css('border','1px dashed red');
+     $('#task-priority').parent().find('.error-message').fadeIn(200);
       $('#task-priority').change(function(){
        
         if($(this).val()=='')
@@ -43,12 +50,14 @@
            $(this).parent().find('.error-message').fadeIn(200);
         }else{
            $(this).parent().find('.error-message').fadeOut(200);
-           $(this).css('border','1px solid green');
-
+           $(this).css('border','1px solid green'); 
         }
       
     });
+  
        //validate STATUS
+       $('#task-status').css('border','1px dashed red');
+       $('#task-status').parent().find('.error-message').fadeIn(200);
        $('#task-status').change(function(){
        
         if($(this).val()=='')
@@ -61,6 +70,9 @@
 
         }
     });
+    
+  
+   
 
 });
 
@@ -113,7 +125,11 @@ document.getElementById("addTaskBtn").addEventListener("click", () => {
     resetForm();
     document.getElementById("task-update-btn").style.display = 'none';
     document.getElementById("task-delete-btn").style.display = 'none';
-    document.getElementById('task-save-btn').style.display = 'block';
+    // document.getElementById('task-save-btn').style.display = 'block';
+    // $('#task-save-btn').hide();
+    $('#task-save-btn').prop( "disabled", true );
+   
+    
 })
 function resetForm() {
     document.getElementById("task-title").value = '';
@@ -125,8 +141,4 @@ function resetForm() {
     document.getElementById("task-status").value = '';
 
 }
-document.getElementById('task-save-btn').addEventListener("click",(e)=>{
-    if(document.getElementById("task-title").value==''){
-        alert('error');
-    }
-})
+
