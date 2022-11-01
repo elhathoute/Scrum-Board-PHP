@@ -261,6 +261,26 @@ include('scripts.php');
 					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
 				</div>
 			<?php endif ?>
+			<?php if (isset($_SESSION['message1'])) : ?>
+				<div class="alert alert-warning alert-dismissible fade show">
+					<strong>Success!</strong>
+					<?php
+					echo $_SESSION['message1'];
+					unset($_SESSION['message1']);
+					?>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
+				</div>
+			<?php endif ?>
+			<?php if (isset($_SESSION['message2'])) : ?>
+				<div class="alert alert-danger alert-dismissible fade show">
+					<strong>Success!</strong>
+					<?php
+					echo $_SESSION['message2'];
+					unset($_SESSION['message2']);
+					?>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></span>
+				</div>
+			<?php endif ?>
 			<div class="row">
 
 				<div class="col-xl-4 col-lg-6 ">
