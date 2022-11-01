@@ -1,0 +1,46 @@
+.search:focus {
+    border: 2px solid white;
+    background-color: black;
+    color:antiquewhite;
+
+    }
+    .error-message{
+        padding: 5px 10px;
+        margin-top: 10px;
+        display: none;
+    }
+    /* #task-title:invalid {
+    border: red solid 3px;
+    } */
+    /* .form-validation{
+        position: relative;
+    }
+    .form-validation span{
+        position: absolute;
+        top: 35px;
+        right: 10px;
+       
+    } */
+    /* .form-validation small{
+       visibility: hidden;
+       
+    }
+
+    .form-validation.success input{
+        border-color: #2ecc;
+    }
+    .form-validation.error input{
+        border-color: rgba(255, 43, 6, 0.8);
+    }
+    .form-validation.success i.fa-check-circle{
+      visibility: visible;
+      color: rgb(54, 230, 57);
+    }
+    .form-validation.error i.fa-exclamation-circle{
+        visibility: visible;
+        color: rgb(235, 81, 34);
+      }
+      .form-validation.error small{
+        visibility: visible;
+        color: rgb(235, 81, 34);
+      } */

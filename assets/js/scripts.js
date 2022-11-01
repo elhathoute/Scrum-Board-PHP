@@ -22,30 +22,45 @@
    
         
      });
-    //  $("#inputSearch1").keyup(function() {
-         
-    //     var search1 = $("#inputSearch1").val();
-    //     $.ajax({
-    //        "url":"searchTask.php",
-    //        "method":"POST",
-    //        "data":{
-        
-    //            inputSearch1:search1
-    //        },
-    //        success:function(result){
-         
-    //            $('#in-progress-tasks').html(result);
-    //        },
-    //        error:function(error){
-    //          console.log("error message is :"+error);
-    //        },
-    //        beforeSend:function(){
-    //          $("#in-progress-tasks").html('<img src="charg9.gif" style="height:160px;width:160px;margin-left:30%;">');
-    //        }
+    //validtion form with jquery
+    //validate title
+    $('#task-title').blur(function(){
+        if($(this).val().length<4){
+            $(this).css('border','1px dashed red');
+           $(this).parent().find('.error-message').fadeIn(200);
+        }else{
+           $(this).parent().find('.error-message').fadeOut(200);
+           $(this).css('border','1px solid green');
 
-    //     });
-    // });
+        }
+    });
+     //validate priority
+      $('#task-priority').change(function(){
+       
+        if($(this).val()=='')
+        {
+            $(this).css('border','1px dashed red');
+           $(this).parent().find('.error-message').fadeIn(200);
+        }else{
+           $(this).parent().find('.error-message').fadeOut(200);
+           $(this).css('border','1px solid green');
 
+        }
+      
+    });
+       //validate STATUS
+       $('#task-status').change(function(){
+       
+        if($(this).val()=='')
+        {
+            $(this).css('border','1px dashed red');
+           $(this).parent().find('.error-message').fadeIn(200);
+        }else{
+           $(this).parent().find('.error-message').fadeOut(200);
+           $(this).css('border','1px solid green');
+
+        }
+    });
 
 });
 
@@ -93,6 +108,7 @@ function edit(id) {
 }
 //disabled btn of update and delete
 document.getElementById("addTaskBtn").addEventListener("click", () => {
+  
     //reset formulaire
     resetForm();
     document.getElementById("task-update-btn").style.display = 'none';
@@ -109,3 +125,8 @@ function resetForm() {
     document.getElementById("task-status").value = '';
 
 }
+document.getElementById('task-save-btn').addEventListener("click",(e)=>{
+    if(document.getElementById("task-title").value==''){
+        alert('error');
+    }
+})

@@ -17,27 +17,12 @@ include('scripts.php');
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 	<link href="assets/css/vendor.min.css" rel="stylesheet" />
 	<link href="assets/css/default/app.min.css" rel="stylesheet" />
+	<link href="assets/css/scrum.css" rel="stylesheet" />
 
 	<!-- ================== END core-css ================== -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script> 
 	
-	
-	<style>
-		.search:focus {
-			border: 2px solid white;
-			background-color: black;
-			color:antiquewhite;
-		
-			}
-		#task-priority:invalid {
-			border: red solid 3px;
-			}
-			#task-title:invalid {
-			border: red solid 3px;
-			}#task-status:invalid {
-			border: red solid 3px;
-			}
-	</style>
+
 	<!-- ================== END core-JQUery ================== -->
 </head>
 
@@ -424,6 +409,10 @@ include('scripts.php');
 								 $next=$page2+1;
 							?>
 							<h4 class="panel-title"><?php echo $done['status'] ;?>(<span id="done-tasks-count"><?php echo $done['id'];?></span>)</h4>
+							<!-- search task of done -->
+							<div class="d-flex  w-20 form-group bg-white rounded-pill w-50 me-2 ">
+							<input type="text" class="search form-control rounded-pill " placeholder="search" id="inputSearch" name="inputSearch" autocomplete="none"/>
+							</div>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -491,10 +480,13 @@ include('scripts.php');
 							<input type="hidden" class="form-control" id="task-id" value="" name="id" >
 						</div>
 						
-						<div class="mb-3">
+						<div class="mb-3 ">
 							<label class="form-label">Title</label>
-							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" placeholder="title must be 4 char au min"  pattern="[A-Za-z0-9]{4,10}"  required  />
-							<div id="titleError"></div>
+							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" placeholder="Exemple:task12"/>
+							<div class="alert alert-danger error-message">
+								<i class="fa fa-warning"></i>
+                               title must be larger than <strong>4</strong> characters
+							</div>
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Type</label>
@@ -507,38 +499,47 @@ include('scripts.php');
 									<input class="form-check-input" name="task-type" type="radio" value=2 id="task-type-bug" />
 									<label class="form-check-label" for="task-type-bug">Bug</label>
 								</div>
+								
+								
 							</div>
-
 						</div>
-						<div class="mb-3">
+						<div class="mb-3 ">
 							<label class="form-label">Priority</label>
-							<select class="form-select" id="task-priority" name="priority" required>
+							<select class="form-select" id="task-priority" name="priority" >
 								<option  value="" >Please select</option>
 								<option id="priority-1" value=1>Critical</option>
 								<option id="priority-2"value=2>High</option>
 								<option id="priority-3" value=3>Medium</option>
 								<option id="priority-4"value=4>Low</option>
-								
-							
-								
 							</select>
+							<div class="alert alert-danger error-message">
+							<i class="fa fa-warning"></i>
+                               please select <strong>priority</strong> 
+							</div>
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Status</label>
-							<select class="form-select" id="task-status" name="status" required>
+							<select class="form-select" id="task-status" name="status" >
 								<option value="">Please select</option>
 								<option id="todo" value=1>To Do</option>
 								<option id="inProgress" value=2>In Progress</option>
 								<option id="done" value=3>Done</option>
 							</select>
+							<div class="alert alert-danger error-message">
+							<i class="fa fa-warning"></i>
+							please select <strong>status</strong> 
+							
+							</div>
+							
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Date</label>
 							<input type="datetime-local" class="form-control" id="task-date" name="date" />
 						</div>
-						<div class="mb-0">
+						<div class="mb-0 ">
 							<label class="form-label">Description</label>
 							<textarea class="form-control" rows="10" id="task-description" name="description" ></textarea>
+							
 						</div>
 
 					</div>
