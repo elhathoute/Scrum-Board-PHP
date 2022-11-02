@@ -17,8 +17,7 @@
         //CODE HERE
           //SQL SELECT
           include('database.php');
-        //   $size=isset($_GET['size'] ) ?$_GET['size']: 3;    
-        //   $page=isset($_GET['page'] ) ?$_GET['page']: 1;
+       
         $debut= ($page-1)*$size ; 
 $requettasks = " SELECT tasks.id,tasks.title,tasks.task_datetime,tasks.description,tasks.status_id,tasks.priority_id,types.name as 'type' ,priorities.name as 'priority',statues.name as'status' FROM tasks,types,priorities,statues where (status_id=$status and tasks.type_id=types.id and tasks.priority_id=priorities.id and tasks.status_id=statues.id )ORDER BY id desc limit $debut,$size ";
 $tasksRequet = mysqli_query($connexion, $requettasks);
@@ -65,17 +64,14 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         //SQL INSERT
     //    global $connexion;
        include('database.php');
-        $title = isset($_POST['title'])  ?  $_POST['title']   :   '';
-
+        $title =isset($_POST['title'])  ?  $_POST['title']   :   '';
         $type = isset($_POST['task-type'])   ?   $_POST['task-type']    :   0;
-
         $priority = isset($_POST['priority'])  ?  $_POST['priority']   :   '0';
-
         $status = isset($_POST['status'])  ?  $_POST['status']   :   '0';
         $date = isset($_POST['date'])  ?  $_POST['date']   :'';
        if($date==''){
         //date and time now if user is not entrer a date exact
-        $date=date("y-m-d h:i:s");
+        $date=date("y-m-d");
        }
            
     
@@ -112,8 +108,12 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
 
         $status = isset($_POST['status'])  ?  $_POST['status']   :   '0';
 
-        $date = isset($_POST['date'])  ?  $_POST['date']   :   '0000-00-00';
-
+        $date = isset($_POST['date'])  ?  $_POST['date']   :'';
+        if($date==''){
+            //date and time now if user is not entrer a date exact
+            $date=date("y-m-d");
+           }
+    
         $description = isset($_POST['description'])  ?  $_POST['description']   :   '';  
 
         $requet = "update tasks set title='$title',task_datetime='$date',description='$description',type_id=$type,priority_id=$priority,status_id=$status where id=$id ";
@@ -122,9 +122,7 @@ $tasksRequet = mysqli_query($connexion, $requettasks);
         if($updateTask){
             $_SESSION['message1'] = "Task has been updated successfully !";
             header('location: index.php');
-        }
-      
-        
+        }  
     }
 
     function deleteTask()

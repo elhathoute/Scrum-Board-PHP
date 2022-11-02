@@ -288,8 +288,8 @@ include('scripts.php');
 						<div class="panel-heading ">
 							<?php 
 							include('database.php');
-							$size=isset($_GET['size'] ) ?$_GET['size']: 4;    
-                            $page=isset($_GET['page'] ) ?$_GET['page']: 1;
+							$size=isset($_GET['size'] ) ? $_GET['size']: 4;    
+                            $page=isset($_GET['page'] ) ? $_GET['page']: 1;
                                  $todo = "SELECT count(tasks.id) as 'id',statues.id as 'id_statu' ,statues.name as 'status' FROM tasks,statues  WHERE (tasks.status_id=statues.id and status_id=1 ) ";
 								 $resultTodo = mysqli_query($connexion, $todo);
 								 $todo = mysqli_fetch_assoc($resultTodo);
@@ -301,9 +301,11 @@ include('scripts.php');
 							?>
 							<h4 class="panel-title"><?php echo $todo['status'] ;?> (<span id="to-do-tasks-count"><?php echo  $nbrOfTodo;?></span>)</h4>
 							<!-- search task of todo -->
+							<?php if( $nbrOfTodo>0){ ?>
 							<div class="d-flex  w-20 form-group bg-white rounded-pill w-50 me-2 ">
 							<input type="text" class="search form-control rounded-pill " placeholder="search" id="inputSearch" name="inputSearch" autocomplete="none"/>
 							</div>
+							<?php } ?>
 						
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
@@ -386,6 +388,7 @@ include('scripts.php');
 							getTasks($inProgr['id_statu'],$size1,$page1);
 							?>
 						</div>
+						<!-- si il ya 5 tasks  -->
 						<?php if($nbrOfInProgress>4) { ?> 
 						<div class="rounded-bottom panel-footer p-0 bg-dark">
 						<nav aria-label="Page navigation example">
@@ -502,7 +505,7 @@ include('scripts.php');
 						
 						<div class="mb-3 ">
 							<label class="form-label">Title</label>
-							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off" placeholder="Exemple:task12"/>
+							<input type="text" class="form-control" id="task-title" name="title" autocomplete="off"  placeholder="Exemple:task12"/>
 							<div class="alert alert-danger error-message">
 								<i class="fa fa-warning"></i>
                                title must be larger than <strong>4</strong> characters
@@ -554,7 +557,7 @@ include('scripts.php');
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Date</label>
-							<input type="datetime-local" class="form-control" id="task-date" name="date" />
+							<input type="date" class="form-control" id="task-date" name="date" />
 						</div>
 						<div class="mb-0 ">
 							<label class="form-label">Description</label>

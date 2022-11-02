@@ -1,4 +1,4 @@
- $(document).ready(function() {
+$(document).ready(function() {
 
      $("#inputSearch").keyup(function() {
          var search = $("#inputSearch").val();
@@ -24,9 +24,12 @@
 
      });
      $('#addTaskBtn').click(function() { //reset formulaire
-         resetForm();
+        document.getElementById("header-task").innerHTML = '<h5>ADD TASK</h5>';
+        
+        resetForm();
          document.getElementById("task-update-btn").style.display = 'none';
          document.getElementById("task-delete-btn").style.display = 'none';
+         document.getElementById('task-save-btn').style.display = 'block';
          // document.getElementById('task-save-btn').style.display = 'block';
          // $('#task-save-btn').hide();
          $('#task-save-btn').prop("disabled", true);
@@ -36,8 +39,9 @@
          $('#task-priority').prop("disabled", true);
          $('#task-status').prop("disabled", true);
          $('#task-title').blur(function() {
-
-             if ($(this).val().length < 4) {
+            var t=$(this).val().replace(/\s+/g, '');
+            console.log(t);
+             if (($(this).val().length < 4)) {
 
                  $(this).css('border', '1px dashed red');
                  $(this).parent().find('.error-message').fadeIn(200);
@@ -84,7 +88,7 @@
 
      });
 
-
+   
 
  });
 
@@ -92,6 +96,8 @@
 
  function edit(id) {
 
+  
+    styleFormUpdate();
      //change the title of modal
      document.getElementById("header-task").innerHTML = '<h5>UPDATE TASK</h5>';
      //get the id from the button
@@ -140,6 +146,14 @@
 
 
  //  })
+ function styleFormUpdate(){
+    $("#task-title").css("border","1px solid grey");
+    $("#task-priority").css("border","1px solid grey");
+    $("#task-priority").prop("disabled",false);
+    $("#task-status").prop("disabled",false);
+    $("#task-status").css("border","1px solid grey");
+    $(".error-message").css("display","none");
+ }
 
  function resetForm() {
      document.getElementById("task-title").value = '';
